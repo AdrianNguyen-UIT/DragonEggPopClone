@@ -14,6 +14,7 @@ const EggShooter = cc.Class({
     graphics: null,
     shootPos: null,
     gameManager: null,
+    audioController: null,
 
     ctor() {
         this.shootDir = cc.v2();
@@ -63,6 +64,7 @@ const EggShooter = cc.Class({
         this.node.on(cc.Node.EventType.MOUSE_DOWN, this.OnMouseDown, this);
         this.graphics = this.getComponent(cc.Graphics);
         this.gameManager = require("GameManager");
+        this.audioController = cc.find("AudioController").getComponent("AudioController");
     },
 
     start() {
@@ -104,10 +106,10 @@ const EggShooter = cc.Class({
                 this.currentShootingEgg.eggType,
                 this.currentShootingEgg.node.color);
 
-
-
             this.currentShootingEgg.SetType(this.nextShootingEgg.eggType, this.nextShootingEgg.node.color);
             this.nextShootingEgg.InitEggType();
+
+            this.audioController.PlayShootEffect();
         }
     },
 

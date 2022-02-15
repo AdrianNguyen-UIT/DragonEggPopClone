@@ -52,13 +52,12 @@ const Egg = cc.Class({
     mightPop: null,
     dying: null,
     popParticles: null,
-
+    isNormalStart: null,
+    audioController: null,
     //endregion
 
     //region Properties Configurations
     properties: {
-        isNormalStart: true,
-        debug: false,
     },
     //endregion
 
@@ -79,6 +78,8 @@ const Egg = cc.Class({
         this.col = this.getComponent(cc.PhysicsCircleCollider);
         this.popParticles = this.node.children[0].getComponent(cc.ParticleSystem);
         //this.node.on(cc.Node.EventType.MOUSE_DOWN, this.OnMouseDown, this);
+        this.isNormalStart = true;
+        this.audioController = cc.find("AudioController").getComponent("AudioController");
 
     },
 
@@ -95,32 +96,14 @@ const Egg = cc.Class({
         this.enableNearDestroyedEgg = false;
         this.mightPop = false;
         this.dying = false;
-
-        if (this.debug) {
-            console.log(this.popParticles);
-        }
     },
 
     update(dt) {
-        if (this.debug) {
-            if (this.gameManager.Instance.dyingCount > 0) {
-                this.gameManager.Instance.gameOverTimeCounter += dt;
-                console.log(this.gameManager.Instance.gameOverTimeCounter);
-                if (this.gameManager.Instance.gameOverTimeCounter >= this.gameManager.Instance.gameOverTime) {
-                    this.gameManager.Instance.PopAllDyingEggCount();
-                    this.gameManager.Instance.ResetGameOverTimer();
-                    cc.director.loadScene("Main");
-
-                }
-            }
-            else {
-                this.gameManager.Instance.gameOverTimeCounter = 0.0;
-            }
-        }
 
         if (this.eggState === EggState.NORMAL) {
             this.CalculateRayCastEndpoints();
             if (this.CheckFalling()) {
+                this.gameManager.Instance.AddFallScore();
                 this.DestroyEgg();
             }
         }
@@ -222,6 +205,7 @@ const Egg = cc.Class({
 
     PlayPopParticles() {
         this.popParticles.resetSystem();
+        this.audioController.PlayPopEffect();
     },
 
 

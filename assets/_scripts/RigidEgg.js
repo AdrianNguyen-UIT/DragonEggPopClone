@@ -1,10 +1,7 @@
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
 //  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/class.html
 
-const EggState = require("Egg").EggState;
 const EggDirection = require("Egg").EggDirection;
-const skinDepth = 0.0;
-
 
 const RigidEgg = cc.Class({
 
@@ -65,15 +62,16 @@ const RigidEgg = cc.Class({
             egg.enableNearDestroyedEgg = true;
 
             let dir = cc.v2();
-            cc.Vec2.normalize(dir, this.previousPos.sub(this.node.convertToWorldSpaceAR(egg.node.getPosition())));
+            const eggPos = cc.v2(egg.node.x + this.gameManager.Instance.canvasX, egg.node.y + this.gameManager.Instance.canvasY);
+            cc.Vec2.normalize(dir, this.node.getPosition().sub(eggPos));
             const angle = this.angle(dir);
-            if (angle <= 15.0) {
+            if (angle <= 45.0) {
                 this.gameManager.Instance.SetNearDestroyedEgg(this.eggType, this.node.color, EggDirection.RIGHT);
             }
             else if (angle <= 90.0) {
                 this.gameManager.Instance.SetNearDestroyedEgg(this.eggType, this.node.color, EggDirection.BOTTOM_RIGHT);
             }
-            else if (angle <= 165.0) {
+            else if (angle <= 135.0) {
                 this.gameManager.Instance.SetNearDestroyedEgg(this.eggType, this.node.color, EggDirection.BOTTOM_LEFT);
             }
             else {

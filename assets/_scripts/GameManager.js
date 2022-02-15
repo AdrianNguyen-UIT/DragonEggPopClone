@@ -30,6 +30,15 @@ const GameManager = cc.Class({
     gameOverTimeCounter:null,
     gameOverTime: null,
 
+    highSpawnXPos: null,
+    lowSpawnXPos: null,
+    highSpawnYPos: null,
+    lowSpawnYPos: null,
+
+    score: null,
+    popScore: null,
+    fallScore: null,
+
     ctor() {
         this.toLineSpeed = -15.0;
         this.heightNearPos = 70;
@@ -55,6 +64,17 @@ const GameManager = cc.Class({
         this.gameOverTime = 6.0;
         this.gameOverTimeCounter = 0.0;
         this.dyingCount = 0.0;
+
+        this.highSpawnXPos = -280.0;
+        this.highSpawnYPos = -287.0;
+
+        this.lowSpawnXPos = -240.0;
+        this.lowSpawnYPos = -217.0;
+
+        this.score = 0;
+        this.popScore = 1;
+        this.fallScore = 2;
+
     },
     statics : {
         Instance: null
@@ -114,7 +134,11 @@ const GameManager = cc.Class({
             for (let index = 0; index < this.mightPopEggs.length; index++) {
                 this.mightPopEggs[index].DestroyEgg();
                 this.mightPopEggs[index].PlayPopParticles();
+
+                this.AddPopScore();
             }
+
+            //cc.find("ScoreLabel").getComponent("ScoreUpdater").UpdateScore();
         }
         else {
             for (let index = 0; index < this.mightPopEggs.length; index++) {
@@ -122,6 +146,14 @@ const GameManager = cc.Class({
             }
         }
         this.mightPopEggs = [];
+    },
+
+    AddPopScore() {
+        this.score += this.popScore;
+    },
+
+    AddFallScore() {
+        this.score += this.fallScore;
     }
 
 });
